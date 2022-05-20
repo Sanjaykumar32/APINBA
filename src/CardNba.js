@@ -1,17 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
-// import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-// import { addDataSlice } from "./features/counter/counterSlice";
 
-export const CardNba = () => {
+export const CardNba = ({ childData, getapidata }) => {
   const [data, setData] = useState([]);
-
-  //   const dispatch = useDispatch();
-  //   const detailsData = useSelector((state) => state.counter);
-
-  //   console.log("redux store data", detailsData);
 
   useEffect(() => {
     axios
@@ -24,19 +17,20 @@ export const CardNba = () => {
       })
       .then((res) => {
         setData(res.data.data);
-        // console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
-  const handleData = (el) => {};
+  useEffect(() => {
+    getapidata(data);
+  }, [data]);
 
   return data.map((el) => {
     return (
       <div key={el.id}>
-        <div className="container-fluid mt-5 ">
+        <div className="container mt-5 ">
           <Card style={{ width: "30rem" }} className="bg-light">
             <Card.Body>
               <Card.Title>
@@ -58,14 +52,9 @@ export const CardNba = () => {
                 on the card title and make up the bulk of the card's content.
               </Card.Text>
 
-              <button
-                className="btn btn-dark"
-                onClick={() => handleData(el.id)}
-              >
-                <Link to={el.id}> Details</Link>
+              <button className="btn btn-dark" onClick={() => childData(el.id)}>
+                <Link to={"/details/" + el.id}> Details</Link>
               </button>
-
-              {/* <Link to="/details">Details</Link> */}
             </Card.Body>
           </Card>
         </div>
